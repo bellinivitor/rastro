@@ -1,6 +1,6 @@
 .PHONY: app debug run test install clean
 
-app:            ## Build release → build/DevTimeline.app
+app:            ## Build release → build/Rastro.app
 	@Scripts/build.sh release
 
 debug:          ## Build debug
@@ -8,16 +8,16 @@ debug:          ## Build debug
 
 run: debug      ## Build debug e abre o app
 	@Scripts/quit.sh
-	@open build/DevTimeline.app
+	@open build/Rastro.app
 
 test:           ## Testes do núcleo (git, parser, estatísticas, banco)
 	@Scripts/build.sh test
 
 install: app    ## Copia para /Applications
 	@Scripts/quit.sh
-	@rm -rf /Applications/DevTimeline.app
-	@cp -R build/DevTimeline.app /Applications/
-	@echo "✓ /Applications/DevTimeline.app"
+	@rm -rf /Applications/Rastro.app
+	@cp -R build/Rastro.app /Applications/
+	@echo "✓ /Applications/Rastro.app"
 
 clean:
 	@rm -rf build .build

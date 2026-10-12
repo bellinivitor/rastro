@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Compila o Dev Timeline com swiftc (sem depender do SwiftPM nem do Xcode).
-#   Scripts/build.sh            → build/DevTimeline.app (release)
-#   Scripts/build.sh debug      → build/DevTimeline.app (debug)
-#   Scripts/build.sh test       → roda os testes do DevTimelineCore
+# Compila o Rastro com swiftc (sem depender do SwiftPM nem do Xcode).
+#   Scripts/build.sh            → build/Rastro.app (release)
+#   Scripts/build.sh debug      → build/Rastro.app (debug)
+#   Scripts/build.sh test       → roda os testes do RastroCore
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -37,12 +37,12 @@ build_arch() {
   local out="$OBJ/$arch"
   mkdir -p "$out"
 
-  echo "› DevTimelineCore ($arch)"
+  echo "› RastroCore ($arch)"
   xcrun swiftc "${OPT[@]}" -sdk "$SDK" -target "$target" -swift-version 5 \
     -parse-as-library -enable-testing \
-    -module-name DevTimelineCore -emit-module -emit-module-path "$out/DevTimelineCore.swiftmodule" \
-    -emit-library -static -o "$out/libDevTimelineCore.a" \
-    "$ROOT"/Sources/DevTimelineCore/*.swift
+    -module-name RastroCore -emit-module -emit-module-path "$out/RastroCore.swiftmodule" \
+    -emit-library -static -o "$out/libRastroCore.a" \
+    "$ROOT"/Sources/RastroCore/*.swift
 
   if [[ "$MODE" == "test" ]]; then
     local fw="$(xcode-select -p)/Library/Developer/Frameworks"
@@ -51,34 +51,34 @@ build_arch() {
 @main struct Runner { static func main() async { await Testing.__swiftPMEntryPoint() as Never } }' > "$runner"
     echo "› Testes ($arch)"
     xcrun swiftc "${OPT[@]}" -sdk "$SDK" -target "$target" -swift-version 5 \
-      -parse-as-library -module-name DevTimelineCoreTests \
-      -I "$out" -L "$out" -lDevTimelineCore -lsqlite3 -F "$fw" -I "$fw" -L "$fw" \
+      -parse-as-library -module-name RastroCoreTests \
+      -I "$out" -L "$out" -lRastroCore -lsqlite3 -F "$fw" -I "$fw" -L "$fw" \
       -Xlinker -rpath -Xlinker "$fw" -Xlinker -rpath -Xlinker "$(xcode-select -p)/Library/Developer/usr/lib" -framework Testing \
       -plugin-path "$(xcode-select -p)/usr/lib/swift/host/plugins/testing" \
-      "$ROOT"/Tests/DevTimelineCoreTests/*.swift "$runner" -o "$out/DevTimelineCoreTests"
-    "$out/DevTimelineCoreTests"
+      "$ROOT"/Tests/RastroCoreTests/*.swift "$runner" -o "$out/RastroCoreTests"
+    "$out/RastroCoreTests"
     return
   fi
 
-  echo "› DevTimeline ($arch)"
+  echo "› Rastro ($arch)"
   xcrun swiftc "${OPT[@]}" -sdk "$SDK" -target "$target" -swift-version 5 \
-    -parse-as-library -module-name DevTimeline \
-    -I "$out" -L "$out" -lDevTimelineCore -lsqlite3 \
-    "$ROOT"/Sources/DevTimeline/*/*.swift \
-    -o "$out/DevTimeline"
+    -parse-as-library -module-name Rastro \
+    -I "$out" -L "$out" -lRastroCore -lsqlite3 \
+    "$ROOT"/Sources/Rastro/*/*.swift \
+    -o "$out/Rastro"
 }
 
 BINARIES=()
 for arch in $ARCHS; do
   build_arch "$arch"
-  BINARIES+=("$OBJ/$arch/DevTimeline")
+  BINARIES+=("$OBJ/$arch/Rastro")
 done
 [[ "$MODE" == "test" ]] && exit 0
 
-APP="$BUILD/DevTimeline.app"
+APP="$BUILD/Rastro.app"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-lipo -create "${BINARIES[@]}" -output "$APP/Contents/MacOS/DevTimeline"
+lipo -create "${BINARIES[@]}" -output "$APP/Contents/MacOS/Rastro"
 
 # Versão de exibição pode ter sufixo (0.1.0-beta); o número de build precisa ser só números (0.1.0).
 BUILD_NUMBER="${VERSION%%-*}"

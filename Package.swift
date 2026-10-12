@@ -2,22 +2,22 @@
 import PackageDescription
 
 let package = Package(
-    name: "DevTimeline",
+    name: "Rastro",
     platforms: [.macOS(.v15)],
     products: [
-        .executable(name: "DevTimeline", targets: ["DevTimeline"]),
+        .executable(name: "Rastro", targets: ["Rastro"]),
     ],
     targets: [
         // Lógica sem UI (git, parsing, estatísticas, banco SQLite).
-        .target(name: "DevTimelineCore"),
+        .target(name: "RastroCore"),
         // App SwiftUI. O build do dia a dia é Scripts/build.sh (make run).
         .executableTarget(
-            name: "DevTimeline",
-            dependencies: ["DevTimelineCore"]
+            name: "Rastro",
+            dependencies: ["RastroCore"]
         ),
         .testTarget(
-            name: "DevTimelineCoreTests",
-            dependencies: ["DevTimelineCore"]
+            name: "RastroCoreTests",
+            dependencies: ["RastroCore"]
         ),
     ],
     swiftLanguageModes: [.v5]

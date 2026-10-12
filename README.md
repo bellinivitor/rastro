@@ -1,4 +1,4 @@
-<h1 align="center">Dev Timeline</h1>
+<h1 align="center">Rastro</h1>
 
 <p align="center">
   Sua linha do tempo como dev, nativa para macOS.<br>
@@ -54,31 +54,31 @@ Planejamento e progresso: [ROADMAP.md](ROADMAP.md).
 ## Rodando
 
 ```bash
-make run      # compila em debug e abre build/DevTimeline.app
+make run      # compila em debug e abre build/Rastro.app
 make test     # testes do núcleo
 make install  # compila em release e copia para /Applications
 ```
 
 Na primeira execução, abra **Ajustes** (⌘,), adicione as pastas onde ficam seus repositórios (ex: `~/code`) e confira o email do autor (vem do `git config --global user.email`).
 
-Os dados ficam em `~/Library/Application Support/DevTimeline/timeline.sqlite`.
+Os dados ficam em `~/Library/Application Support/Rastro/timeline.sqlite`.
 
 ## Estrutura
 
 ```
 Sources/
-  DevTimelineCore/     lógica sem interface, testável sozinha
+  RastroCore/     lógica sem interface, testável sozinha
                        GitScanner, RepoFinder, GitLogParser, MergeParser (PR/MR),
                        GitHubCLI, CommitMessage, Stats, Standup,
                        Database (SQLite + migrações), Importer, Models, Deploy
-  DevTimeline/
+  Rastro/
     App/               entrada do app e atalho global
     Services/          AppStore: estado observável, recarrega do banco após cada escrita
     Views/             timeline, estatísticas, standup, deploy, epics, notas, ajustes
     Support/           ajustes, paleta de cores, atalhos
 Scripts/               build.sh (swiftc) e quit.sh
 Tests/
-  DevTimelineCoreTests/  parser, estatísticas, banco, standup, epics e scanner
+  RastroCoreTests/  parser, estatísticas, banco, standup, epics e scanner
                          com repositórios git reais em pasta temporária
 ```
 
