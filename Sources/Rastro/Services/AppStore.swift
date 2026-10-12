@@ -27,13 +27,21 @@ final class AppStore {
 
     init() {
         do {
-            database = try Database(path: Database.defaultURL().path)
+            database = try Self.openDatabase()
         } catch {
             // Sem banco em disco o app ainda abre, mas nada persiste.
             database = try! Database(path: ":memory:")
             status = "Erro ao abrir o banco: \(error)"
         }
         reload()
+    }
+
+    /// O banco real, ou um temporário com dados fictícios no modo demonstração.
+    private static func openDatabase() throws -> Database {
+        guard DemoMode.isOn else { return try Database(path: Database.defaultURL().path) }
+        let database = try Database(path: DemoMode.databaseURL.path)
+        try DemoData.seed(database)
+        return database
     }
 
     func reload() {

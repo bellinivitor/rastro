@@ -20,6 +20,7 @@ final class QuickNoteController: NSObject, NSWindowDelegate {
         panel.delegate = self
         let view = QuickNoteView(onClose: { [weak self] in self?.close() })
             .environment(AppStore.shared)
+            .defaultAppStorage(AppSettings.defaults)
         panel.contentView = NSHostingView(rootView: view)
         panel.setContentSize(panel.contentView!.fittingSize)
 

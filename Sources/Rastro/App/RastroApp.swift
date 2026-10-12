@@ -8,7 +8,7 @@ struct RastroApp: App {
 
     init() {
         // Antes de abrir o banco: traz os dados do tempo em que o app se chamava Dev Timeline.
-        LegacyMigration.run()
+        if !DemoMode.isOn { LegacyMigration.run() }
         _store = State(initialValue: AppStore.shared)
     }
 
@@ -17,7 +17,9 @@ struct RastroApp: App {
             ContentView()
                 .frame(minWidth: 900, minHeight: 600)
                 .environment(store)
+                .defaultAppStorage(AppSettings.defaults)
         }
+        .defaultSize(width: 1180, height: 760)
         .commands {
             DeployCommands()
             CommandGroup(after: .newItem) {
@@ -28,6 +30,7 @@ struct RastroApp: App {
 
         Settings {
             SettingsView()
+                .defaultAppStorage(AppSettings.defaults)
         }
     }
 }
@@ -37,7 +40,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @MainActor
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Prints do README: desenha as telas fora da tela e fecha.
+        if let folder = Snapshots.outputFolder {
+            NSApp.setActivationPolicy(.accessory)
+            NSApp.windows.forEach { $0.close() }
+            Snapshots.run(into: folder)
+            return
+        }
         NSApp.activate(ignoringOtherApps: true)
+        // Demonstração: só os dados fictícios, sem escanear pastas nem registrar atalho global.
+        guard !DemoMode.isOn else { return }
         AppStore.shared.startAutoScan()
 
         quickNoteHotKey = GlobalHotKey.quickNote { QuickNoteController.shared.toggle() }

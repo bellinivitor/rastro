@@ -44,56 +44,62 @@ struct SidebarView: View {
 
     var body: some View {
         List(selection: $selection) {
-            Section("Visão") {
-                Label("Timeline", systemImage: "clock").tag(SidebarItem.timeline)
-                Label("Estatísticas", systemImage: "chart.bar").tag(SidebarItem.stats)
-                Label("Deploy pendente", systemImage: "shippingbox")
-                    .badge(store.pendingDeploys.count)
-                    .tag(SidebarItem.deploys)
-            }
+            Group {
+                Section("Visão") {
+                    Label("Timeline", systemImage: "clock").tag(SidebarItem.timeline)
+                    Label("Estatísticas", systemImage: "chart.bar").tag(SidebarItem.stats)
+                    Label("Deploy pendente", systemImage: "shippingbox")
+                        .badge(store.pendingDeploys.count)
+                        .tag(SidebarItem.deploys)
+                }
 
-            if !favorites.isEmpty {
-                Section("Favoritos") {
-                    ForEach(favorites) { project in
-                        ProjectRow(project: project, showsStar: false, sheet: $sheet)
-                            .tag(SidebarItem.favorite(project.id))
+                if !favorites.isEmpty {
+                    Section("Favoritos") {
+                        ForEach(favorites) { project in
+                            ProjectRow(project: project, showsStar: false, sheet: $sheet)
+                                .tag(SidebarItem.favorite(project.id))
+                        }
                     }
                 }
-            }
 
-            Section("Projetos") {
-                ForEach(store.groups) { group in
-                    let members = projects(in: group.id)
-                    if !members.isEmpty {
-                        DisclosureGroup(isExpanded: expansion(for: group.id)) {
-                            ForEach(members) { project in
-                                ProjectRow(project: project, showsStar: true, sheet: $sheet)
-                                    .tag(SidebarItem.project(project.id))
+                Section("Projetos") {
+                    ForEach(store.groups) { group in
+                        let members = projects(in: group.id)
+                        if !members.isEmpty {
+                            DisclosureGroup(isExpanded: expansion(for: group.id)) {
+                                ForEach(members) { project in
+                                    ProjectRow(project: project, showsStar: true, sheet: $sheet)
+                                        .tag(SidebarItem.project(project.id))
+                                }
+                            } label: {
+                                GroupRow(group: group, members: members, sheet: $sheet)
+                                    .tag(SidebarItem.group(group.id))
+                            }
+                        }
+                    }
+
+                    ForEach(projects(in: nil)) { project in
+                        ProjectRow(project: project, showsStar: true, sheet: $sheet)
+                            .tag(SidebarItem.project(project.id))
+                    }
+
+                    if !store.hiddenProjects.isEmpty {
+                        DisclosureGroup(isExpanded: $showsHidden) {
+                            ForEach(store.hiddenProjects) { project in
+                                HiddenProjectRow(project: project, sheet: $sheet)
                             }
                         } label: {
-                            GroupRow(group: group, members: members, sheet: $sheet)
-                                .tag(SidebarItem.group(group.id))
+                            Label("Ocultos (\(store.hiddenProjects.count))", systemImage: "eye.slash")
+                                .foregroundStyle(.secondary)
                         }
-                    }
-                }
-
-                ForEach(projects(in: nil)) { project in
-                    ProjectRow(project: project, showsStar: true, sheet: $sheet)
-                        .tag(SidebarItem.project(project.id))
-                }
-
-                if !store.hiddenProjects.isEmpty {
-                    DisclosureGroup(isExpanded: $showsHidden) {
-                        ForEach(store.hiddenProjects) { project in
-                            HiddenProjectRow(project: project, sheet: $sheet)
-                        }
-                    } label: {
-                        Label("Ocultos (\(store.hiddenProjects.count))", systemImage: "eye.slash")
-                            .foregroundStyle(.secondary)
                     }
                 }
             }
+            // Sem divisórias entre os itens (a barra lateral do macOS não tem; o estilo dos prints teria).
+            .listRowSeparator(.hidden)
+            .listSectionSeparator(.hidden)
         }
+        .snapshotFriendlySidebar()
         .sheet(item: $sheet) { sheet in
             switch sheet {
             case .settings(let project):
@@ -213,5 +219,20 @@ private struct ProjectMenu: View {
         Button("Configurar…") { sheet = .settings(project) }
         Divider()
         Button("Esconder") { store.setHidden(true, project) }
+    }
+}
+
+private extension View {
+    /// Nos prints, a lista lateral translúcida não é desenhada fora da tela;
+    /// lá ela usa um estilo sólido no tom da barra lateral escura.
+    @ViewBuilder
+    func snapshotFriendlySidebar() -> some View {
+        if Snapshots.isActive {
+            listStyle(.inset)
+                .scrollContentBackground(.hidden)
+                .background(Color(white: 0.165))
+        } else {
+            listStyle(.sidebar)
+        }
     }
 }
