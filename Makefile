@@ -1,4 +1,4 @@
-.PHONY: app debug run test install clean
+.PHONY: app debug run test install clean screenshots
 
 app:            ## Build release → build/Rastro.app
 	@Scripts/build.sh release
@@ -18,6 +18,9 @@ install: app    ## Copia para /Applications
 	@rm -rf /Applications/Rastro.app
 	@cp -R build/Rastro.app /Applications/
 	@echo "✓ /Applications/Rastro.app"
+
+screenshots:    ## Prints do README com dados fictícios → docs/images
+	@Scripts/screenshots.sh
 
 clean:
 	@rm -rf build .build

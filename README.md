@@ -16,6 +16,10 @@
   <a href="https://buymeacoffee.com/vitorbellini"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-%E2%98%95-FFDD00" alt="Buy Me a Coffee"></a>
 </p>
 
+<p align="center">
+  <img src="docs/images/timeline.png" width="760" alt="Timeline do Rastro com commits, PRs, uma nota e um lembrete de deploy">
+</p>
+
 Tudo offline, com os dados na sua máquina (SQLite).
 
 Planejamento e progresso: [ROADMAP.md](ROADMAP.md).
@@ -37,9 +41,13 @@ Planejamento e progresso: [ROADMAP.md](ROADMAP.md).
 - Listas de "Hoje vou" e "Bloqueios", com sugestões do que está em aberto (deploys pendentes, PRs abertos).
 - Copia em texto e HTML: cola formatado no Teams/Slack e limpo no terminal.
 
+<p align="center"><img src="docs/images/standup.png" width="480" alt="Standup montado com o último dia de trabalho e hoje"></p>
+
 **Deploy**
 - Lista de "precisa ir pra produção" por projeto. Marque um commit ou PR pela caixinha na timeline, pelo clique direito, com ⌘D ou escrevendo `[deploy]` na mensagem do commit.
 - Epics: selecione vários commits de um projeto (⌘-clique / ⇧-clique) e agrupe numa epic, que sobe inteira de uma vez.
+
+<p align="center"><img src="docs/images/deploy.png" width="640" alt="Lista de deploy pendente com uma tarefa, um commit e uma epic"></p>
 
 **Notas**
 - Nota rápida de qualquer app com ⌥⌘N: escreve, Enter, volta ao que estava fazendo.
@@ -48,6 +56,8 @@ Planejamento e progresso: [ROADMAP.md](ROADMAP.md).
 **Organização**
 - Favoritos, grupos por cliente (com timeline combinada), renomear, trocar cor e esconder repositórios.
 - Estatísticas: heatmap anual, sequência de dias com commits e projetos com mais commits.
+
+<p align="center"><img src="docs/images/stats.png" width="640" alt="Estatísticas com heatmap anual e projetos com mais commits"></p>
 
 ## Requisitos
 
@@ -61,7 +71,10 @@ Planejamento e progresso: [ROADMAP.md](ROADMAP.md).
 make run      # compila em debug e abre build/Rastro.app
 make test     # testes do núcleo
 make install  # compila em release e copia para /Applications
+make screenshots  # regera os prints do README com dados fictícios
 ```
+
+Para ver o app com dados de exemplo, sem tocar nos seus: `build/Rastro.app/Contents/MacOS/Rastro --demo`.
 
 Na primeira execução, abra **Ajustes** (⌘,), adicione as pastas onde ficam seus repositórios (ex: `~/code`) e confira o email do autor (vem do `git config --global user.email`).
 
