@@ -1,6 +1,18 @@
-# Dev Timeline
+<h1 align="center">Dev Timeline</h1>
 
-App nativo de macOS que lê seus repositórios git e monta uma linha do tempo do seu trabalho como dev: commits, pull/merge requests, deploys e notas, com standup pronto pra colar no chat do time. Tudo offline, com os dados na sua máquina (SQLite).
+<p align="center">
+  Sua linha do tempo como dev, nativa para macOS.<br>
+  Commits, pull/merge requests, deploys e notas num só lugar, com standup pronto pra colar no chat do time.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/macOS-14%2B-blue" alt="macOS 14+">
+  <img src="https://img.shields.io/badge/Swift-SwiftUI-orange" alt="SwiftUI">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licen%C3%A7a-MIT-green" alt="Licença MIT"></a>
+  <a href="https://buymeacoffee.com/vitorbellini"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-%E2%98%95-FFDD00" alt="Buy Me a Coffee"></a>
+</p>
+
+Tudo offline, com os dados na sua máquina (SQLite).
 
 Planejamento e progresso: [ROADMAP.md](ROADMAP.md).
 
@@ -71,3 +83,13 @@ Tests/
 ```
 
 O `Importer` é o único ponto que grava eventos importados e deduplica pelo `uid` de cada evento (`commit:<repo>#<hash>`, `pr:<remote>#<n>:<estado>`). Cada escaneamento busca só a partir do último commit conhecido do projeto, e o `INSERT OR IGNORE` descarta o que já existe.
+
+## Licença
+
+[MIT](LICENSE)
+
+## Apoie
+
+Se este projeto te ajudou, você pode me pagar um café ☕
+
+<a href="https://buymeacoffee.com/vitorbellini"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" height="40"></a>
