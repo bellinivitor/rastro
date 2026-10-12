@@ -8,6 +8,8 @@
     <string>Rastro</string>
     <key>CFBundleExecutable</key>
     <string>Rastro</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
     <string>app.rastro.mac</string>
     <key>CFBundleInfoDictionaryVersion</key>

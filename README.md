@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/icone.png" width="128" alt="Ícone do Rastro">
+</p>
+
 <h1 align="center">Rastro</h1>
 
 <p align="center">
@@ -83,6 +87,10 @@ Tests/
 ```
 
 O `Importer` é o único ponto que grava eventos importados e deduplica pelo `uid` de cada evento (`commit:<repo>#<hash>`, `pr:<remote>#<n>:<estado>`). Cada escaneamento busca só a partir do último commit conhecido do projeto, e o `INSERT OR IGNORE` descarta o que já existe.
+
+## Por que "Rastro"
+
+Todo commit, PR e deploy deixa um rastro. O app junta essas pegadas num caminho que você consegue seguir de volta: o que fez, quando e em qual projeto. O ícone é isso, uma trilha que vem desbotada do passado até o ponto mais recente.
 
 ## Licença
 

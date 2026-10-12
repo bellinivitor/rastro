@@ -84,6 +84,13 @@ lipo -create "${BINARIES[@]}" -output "$APP/Contents/MacOS/Rastro"
 BUILD_NUMBER="${VERSION%%-*}"
 sed -e "s/__VERSION__/$VERSION/g" -e "s/__BUILD__/$BUILD_NUMBER/g" "$ROOT/Resources/Info.plist" > "$APP/Contents/Info.plist"
 
+if [[ ! -f "$BUILD/AppIcon.icns" || "$ROOT/Scripts/make-icon.swift" -nt "$BUILD/AppIcon.icns" ]]; then
+  echo "› Ícone"
+  xcrun swift "$ROOT/Scripts/make-icon.swift" "$BUILD/AppIcon.iconset" >/dev/null
+  iconutil -c icns "$BUILD/AppIcon.iconset" -o "$BUILD/AppIcon.icns"
+fi
+cp "$BUILD/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
+
 # Assinatura: use SIGN_IDENTITY="Developer ID Application: ..." para distribuição; padrão é ad-hoc.
 codesign --force --options runtime --timestamp=none --sign "${SIGN_IDENTITY:--}" "$APP" >/dev/null
 echo "✓ $APP"
